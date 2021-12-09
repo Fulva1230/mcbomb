@@ -9,6 +9,7 @@ interface DropsCollector {
 
 interface ItemTagger {
     var count: Int
+    fun hasCount(): Boolean
 
     fun getTagger(item: Item): ItemTagger
 }
@@ -23,8 +24,9 @@ class DownCounter(
     private fun activate() {
         for (item in dropsCollector.getDrops()) {
             val tagger = itemTagger.getTagger(item)
-            if (tagger.count > 0)
+            if (tagger.hasCount() && tagger.count > 0) {
                 --tagger.count
+            }
         }
     }
 
