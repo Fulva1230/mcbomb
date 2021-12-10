@@ -40,3 +40,9 @@ tasks.register("populate plugin", Copy::class) {
     from("build/libs")
     into("server/plugins")
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
