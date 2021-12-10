@@ -7,25 +7,23 @@ interface DropsCollector {
     fun getDrops(): List<Item>
 }
 
-interface ItemTagger {
-    var count: Int
-    fun hasCount(): Boolean
-
-    fun getTagger(item: Item): ItemTagger
-}
-
 class DownCounter(
     private val dropsCollector: DropsCollector,
-    private val itemTagger: ItemTagger
+    private val itemTaggerBuilder: IntegerTagger.Builder,
+    private val taskRegistry: TaskRegistry
 ) {
-    val task
-        get() = Runnable()
+    private val task
+        get() = TaskSpec(0, 20, Runnable(), TaskType.PERIODIC)
+
+    init {
+        taskRegistry.registerTask(task)
+    }
 
     private fun activate() {
         for (item in dropsCollector.getDrops()) {
-            val tagger = itemTagger.getTagger(item)
-            if (tagger.hasCount() && tagger.count > 0) {
-                --tagger.count
+            val tagger = itemTaggerBuilder.getTagger(item)
+            if (tagger.hasValue() && tagger.value > 0) {
+                --tagger.value
             }
         }
     }
