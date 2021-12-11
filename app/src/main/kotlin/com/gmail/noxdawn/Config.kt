@@ -22,13 +22,21 @@ val module = module {
     single<Tagger.Builder<UUID>>(named("bomb_unique")) {
         UUIDTaggerImpl.BuilderImpl(NamespacedKey(get<JavaPlugin>(), "bomb_unique"))
     }
-    single(named("bomb")) { CommandSpec("bomb", BombCreationExecutor(get(named("bomb_count")))) }
+    single<Tagger.Builder<Double>>(named("bomb_power")) {
+        DoubleTaggerImpl.BuilderImpl(NamespacedKey(get<JavaPlugin>(), "bomb_power"))
+    }
+    single(named("bomb")) {
+        CommandSpec(
+            "bomb",
+            BombCreationExecutor(get(named("bomb_count")), get(named("bomb_power")))
+        )
+    }
     single(named("bombinfo")) { CommandSpec("bombinfo", BombInfoExecutor(get(named("bomb_count")))) }
     single<Listener> { BombEventListener(get(named("bomb_count")), get(named("bomb_unique")), get()) }
     single<Logger> { VerboseLoggerImpl(get()) }
     single { get<JavaPlugin>().logger }
     single<DropsCollector> { DropsCollectorImpl(get()) }
     single<TaskRegistry> { TaskRegistryImpl(get()) }
-    single<Controller> { BombController(get(), get(named("bomb_count"))) }
-    single(createdAtStart=true) {Runner(get(), getAll())}
+    single<Controller> { BombController(get(), get(named("bomb_count")), get(named("bomb_power"))) }
+    single(createdAtStart = true) { Runner(get(), getAll()) }
 }

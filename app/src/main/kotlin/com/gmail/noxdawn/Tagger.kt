@@ -33,3 +33,22 @@ class UUIDTaggerImpl private constructor(
         override fun getTagger(item: PersistentDataHolder): Tagger<UUID> = UUIDTaggerImpl(key, item)
     }
 }
+
+class DoubleTaggerImpl private constructor(
+    private val key: NamespacedKey,
+    private val item: PersistentDataHolder,
+) : Tagger<Double> {
+    override var value: Double
+        get() {
+            return item.persistentDataContainer.getOrDefault(key, PersistentDataType.DOUBLE, 0.0)
+        }
+        set(value) {
+            item.persistentDataContainer.set(key, PersistentDataType.DOUBLE, value)
+        }
+
+    override fun hasValue(): Boolean = item.persistentDataContainer.has(key, PersistentDataType.DOUBLE)
+
+    class BuilderImpl(private val key: NamespacedKey) : Tagger.Builder<Double> {
+        override fun getTagger(item: PersistentDataHolder): Tagger<Double> = DoubleTaggerImpl(key, item)
+    }
+}
