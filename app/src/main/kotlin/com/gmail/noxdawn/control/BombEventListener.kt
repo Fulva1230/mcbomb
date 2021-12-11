@@ -2,10 +2,11 @@ package com.gmail.noxdawn.control
 
 import com.gmail.noxdawn.Logger
 import com.gmail.noxdawn.Tagger
+import org.bukkit.entity.Item
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.player.PlayerDropItemEvent
+import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.ItemSpawnEvent
 import java.util.*
 
 class BombEventListener(
@@ -14,23 +15,33 @@ class BombEventListener(
     private val logger: Logger
 ) : Listener {
     @EventHandler
-    fun checkTags(event: EntityPickupItemEvent) {
-        val taggerOfItem = bombCountTaggerBuilder.getTagger(event.item)
-        logger.debug("If the item has tag: ${taggerOfItem.hasValue()}")
-        val taggerOfItemStack = bombCountTaggerBuilder.getTagger(event.item.itemStack.itemMeta!!)
-        logger.debug("If the associated itemStack has tag: ${taggerOfItemStack.hasValue()}")
+    fun setBombToChainExplosion(event: EntityDamageEvent) {
+        val item = event.entity as? Item
+        if (item != null) {
+            item.itemStack.itemMeta = item.itemStack.itemMeta?.also { dataHolder ->
+                val countTagger = bombCountTaggerBuilder.getTagger(dataHolder)
+                if (countTagger.hasValue()) {
+                    countTagger.value = 0
+                    event.isCancelled = true
+                }
+            }
+        }
     }
 
     @EventHandler
-    fun bombDropPrepare(event: PlayerDropItemEvent) {
-        event.itemDrop.itemStack.itemMeta = event.itemDrop.itemStack.itemMeta?.also {
+    fun itemSpawnEvent(event: ItemSpawnEvent) {
+        prepareBomb(event.entity)
+    }
+
+    private fun prepareBomb(item: Item) {
+        item.itemStack.itemMeta = item.itemStack.itemMeta?.also {
             val countTagger = bombCountTaggerBuilder.getTagger(it)
             if (countTagger.hasValue()) {
-                event.itemDrop.customName = "${(countTagger.value + 9) / 10}"
-                event.itemDrop.isCustomNameVisible = true
+                item.customName = "${(countTagger.value + 9) / 10}"
+                item.isCustomNameVisible = true
+                val uniqueTagger = bombUniqueTaggerBuilder.getTagger(it)
+                uniqueTagger.value = UUID.randomUUID()
             }
-            val uniqueTagger = bombUniqueTaggerBuilder.getTagger(it)
-            uniqueTagger.value = UUID.randomUUID()
         }
     }
 }

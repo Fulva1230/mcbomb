@@ -13,7 +13,7 @@ class BombInfoExecutor(
         if (player != null) {
             val itemHold = player.inventory.itemInMainHand
             val tagger = bombCountTaggerBuilder.getTagger(itemHold.itemMeta!!)
-            sender.sendMessage("the item is ${if (tagger.hasValue()) "" else "not"} a bomb")
+            sender.sendMessage("the item is ${if (tagger.hasValue()) "" else "not "}a bomb")
             return true
         }
         return false
