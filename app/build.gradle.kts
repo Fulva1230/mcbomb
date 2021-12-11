@@ -41,7 +41,9 @@ dependencies {
 tasks.register("populate plugin", Copy::class) {
     group = "debug"
     dependsOn("shadowJar")
-    from("build/libs")
+    from("build/libs") {
+        include("*-all.jar")
+    }
     into("server/plugins")
 }
 

@@ -9,7 +9,7 @@ interface DropsCollector {
 
 class BombController(
     private val dropsCollector: DropsCollector,
-    private val itemTaggerBuilder: Tagger.Builder<Int>,
+    private val countDownTaggerBuilder: Tagger.Builder<Int>,
     private val taskRegistry: TaskRegistry
 ) {
     private val task
@@ -21,13 +21,31 @@ class BombController(
 
     private fun activate() {
         for (item in dropsCollector.getDrops()) {
-            item.itemStack.itemMeta = item.itemStack.itemMeta?.also {
-                val tagger = itemTaggerBuilder.getTagger(it)
-                if (tagger.hasValue() && tagger.value > 0) {
-                    --tagger.value
-                    item.customName = "${(tagger.value + 9) / 10}"
+            ItemUpdate(item).update()
+        }
+    }
+
+    private inner class ItemUpdate(private val item: Item) {
+        private val itemMetaCopy = item.itemStack.itemMeta
+        private val countdownTagger = itemMetaCopy?.let { countDownTaggerBuilder.getTagger(it) }
+
+        fun update() {
+            countdownTagger?.let { countdownTagger ->
+                if (countdownTagger.hasValue() && countdownTagger.value > 0) {
+                    --countdownTagger.value
+                    item.customName = "${(countdownTagger.value + 9) / 10}"
                 }
+                if (countdownTagger.value == 0) {
+                    explode()
+                    item.remove()
+                    countdownTagger.value = -1
+                }
+                item.itemStack.itemMeta = itemMetaCopy
             }
+        }
+
+        private fun explode() {
+            item.world.createExplosion(item.location, 3.0f)
         }
     }
 
