@@ -1,47 +1,36 @@
 package com.gmail.noxdawn.control
 
-import com.gmail.noxdawn.Tagger
-import org.bukkit.entity.Item
+import java.util.*
 
-interface DropsCollector {
-    fun getDrops(): Iterable<Item>
+data class BombState(
+    val id: UUID,
+    val count: Int,
+    val shouldExplode: Boolean,
+    val power: Double,
+)
+
+interface BombCollector {
+    fun getBombs(): Iterable<BombState>
+}
+
+interface BombStateApplier {
+    fun apply(currentState: BombState, nextState: BombState)
 }
 
 class BombController(
-    private val dropsCollector: DropsCollector,
-    private val countDownTaggerBuilder: Tagger.Builder<Int>,
-    private val powerTaggerBuilder: Tagger.Builder<Double>,
+    private val bombCollector: BombCollector, private val bombStateApplier: BombStateApplier
 ) : Controller {
     override val period: Int = 2
 
     override fun activate() {
-        for (item in dropsCollector.getDrops()) {
-            ItemUpdate(item).update()
-        }
-    }
-
-    private inner class ItemUpdate(private val item: Item) {
-        private val itemMetaCopy = item.itemStack.itemMeta
-        private val countdownTagger = itemMetaCopy?.let { countDownTaggerBuilder.getTagger(it) }
-        private val powerTagger = itemMetaCopy?.let { powerTaggerBuilder.getTagger(it) }
-
-        fun update() {
-            if (countdownTagger != null) {
-                if (countdownTagger.hasValue() && countdownTagger.value > 0) {
-                    --countdownTagger.value
-                    item.customName = "${(countdownTagger.value + 9) / 10}"
-                }
-                if (countdownTagger.value == 0) {
-                    explode()
-                    item.remove()
-                    countdownTagger.value = -1
-                }
-                item.itemStack.itemMeta = itemMetaCopy
+        for (bomb in bombCollector.getBombs()) {
+            var nextCount = if (bomb.count > 0) bomb.count - 1 else bomb.count
+            val shouldExplode = nextCount == 0
+            if (shouldExplode) {
+                nextCount = -1
             }
-        }
-
-        private fun explode() {
-            item.world.createExplosion(item.location, powerTagger?.value?.toFloat() ?: 3.0f)
+            val nextState = bomb.copy(shouldExplode = shouldExplode, count = nextCount)
+            bombStateApplier.apply(bomb, nextState)
         }
     }
 }
