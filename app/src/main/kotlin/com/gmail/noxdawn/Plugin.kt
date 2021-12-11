@@ -21,8 +21,14 @@ class Plugin : JavaPlugin() {
             modules(module)
         }
 
-        koinApp.koin.getAll<CommandSpec>().forEach { getCommand(it.name)?.setExecutor(it.executor) }
-        koinApp.koin.getAll<Listener>().forEach { server.pluginManager.registerEvents(it, this) }
+        koinApp.koin.getAll<CommandSpec>().forEach {
+            koinApp.koin.get<Logger>().debug("register command executor $it")
+            getCommand(it.name)?.setExecutor(it.executor)
+        }
+        koinApp.koin.getAll<Listener>().forEach {
+            koinApp.koin.get<Logger>().debug("register $it")
+            server.pluginManager.registerEvents(it, this)
+        }
     }
 
     override fun onDisable() {

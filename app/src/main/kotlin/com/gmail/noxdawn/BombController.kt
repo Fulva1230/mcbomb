@@ -4,16 +4,16 @@ import org.bukkit.entity.Item
 import org.bukkit.scheduler.BukkitRunnable
 
 interface DropsCollector {
-    fun getDrops(): List<Item>
+    fun getDrops(): Iterable<Item>
 }
 
-class DownCounter(
+class BombController(
     private val dropsCollector: DropsCollector,
-    private val itemTaggerBuilder: IntegerTagger.Builder,
+    private val itemTaggerBuilder: Tagger.Builder<Int>,
     private val taskRegistry: TaskRegistry
 ) {
     private val task
-        get() = TaskSpec(0, 20, Runnable(), TaskType.PERIODIC)
+        get() = TaskSpec(0, 2, Runnable(), TaskType.PERIODIC)
 
     init {
         taskRegistry.registerTask(task)
@@ -21,9 +21,12 @@ class DownCounter(
 
     private fun activate() {
         for (item in dropsCollector.getDrops()) {
-            val tagger = itemTaggerBuilder.getTagger(item)
-            if (tagger.hasValue() && tagger.value > 0) {
-                --tagger.value
+            item.itemStack.itemMeta = item.itemStack.itemMeta?.also {
+                val tagger = itemTaggerBuilder.getTagger(it)
+                if (tagger.hasValue() && tagger.value > 0) {
+                    --tagger.value
+                    item.customName = "${(tagger.value + 9) / 10}"
+                }
             }
         }
     }

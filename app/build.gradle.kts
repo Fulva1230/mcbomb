@@ -15,10 +15,15 @@ spigot {
     main = "com.gmail.noxdawn.Plugin"
     description = "A sample plugin"
     load = kr.entree.spigradle.data.Load.STARTUP
+    apiVersion = "1.17"
 
     commands {
         create("bomb") {
             description = "Make the items hold bombs"
+            usage = "/<command>"
+        }
+        create("bombinfo") {
+            description = "Check items hold are bombs"
             usage = "/<command>"
         }
     }
@@ -29,7 +34,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation("io.insert-koin:koin-core:$koin_version")
     compileOnly(spigot("1.17.1"))
 }
@@ -45,4 +49,9 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         jvmTarget = "17"
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_17
 }
