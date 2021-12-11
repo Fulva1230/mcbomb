@@ -1,5 +1,6 @@
-package com.gmail.noxdawn
+package com.gmail.noxdawn.commands
 
+import com.gmail.noxdawn.Tagger
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

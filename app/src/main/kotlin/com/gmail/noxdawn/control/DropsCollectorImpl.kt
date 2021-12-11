@@ -1,4 +1,4 @@
-package com.gmail.noxdawn
+package com.gmail.noxdawn.control
 
 import org.bukkit.entity.Item
 import org.bukkit.plugin.java.JavaPlugin

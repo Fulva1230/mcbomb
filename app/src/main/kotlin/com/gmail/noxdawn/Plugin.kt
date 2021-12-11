@@ -1,5 +1,6 @@
 package com.gmail.noxdawn
 
+import com.gmail.noxdawn.commands.CommandSpec
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 import org.koin.core.KoinApplication

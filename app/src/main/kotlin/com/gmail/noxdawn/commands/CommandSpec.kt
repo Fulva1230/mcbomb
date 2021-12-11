@@ -1,4 +1,4 @@
-package com.gmail.noxdawn
+package com.gmail.noxdawn.commands
 
 import org.bukkit.command.CommandExecutor
 

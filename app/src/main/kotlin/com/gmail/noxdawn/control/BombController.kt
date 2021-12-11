@@ -1,7 +1,7 @@
-package com.gmail.noxdawn
+package com.gmail.noxdawn.control
 
+import com.gmail.noxdawn.Tagger
 import org.bukkit.entity.Item
-import org.bukkit.scheduler.BukkitRunnable
 
 interface DropsCollector {
     fun getDrops(): Iterable<Item>
@@ -10,16 +10,10 @@ interface DropsCollector {
 class BombController(
     private val dropsCollector: DropsCollector,
     private val countDownTaggerBuilder: Tagger.Builder<Int>,
-    private val taskRegistry: TaskRegistry
-) {
-    private val task
-        get() = TaskSpec(0, 2, Runnable(), TaskType.PERIODIC)
+) : Controller {
+    override val period: Int = 2
 
-    init {
-        taskRegistry.registerTask(task)
-    }
-
-    private fun activate() {
+    override fun activate() {
         for (item in dropsCollector.getDrops()) {
             ItemUpdate(item).update()
         }
@@ -46,12 +40,6 @@ class BombController(
 
         private fun explode() {
             item.world.createExplosion(item.location, 3.0f)
-        }
-    }
-
-    inner class Runnable : BukkitRunnable() {
-        override fun run() {
-            activate()
         }
     }
 }
