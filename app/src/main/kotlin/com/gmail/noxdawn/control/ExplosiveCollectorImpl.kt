@@ -10,7 +10,7 @@ class ExplosiveImpl(
     private val powerTagger: Tagger<Double>,
 ) : Explosive {
     override val isTriggered: Boolean
-    get() = triggerTagger.value == 1
+        get() = triggerTagger.value == 1
 
     override fun explode() {
         item.world.createExplosion(item.location, powerTagger.value.toFloat())
@@ -21,8 +21,8 @@ class ExplosiveImpl(
 
 class ExplosiveCollectorImpl(
     private val plugin: JavaPlugin,
-    private val triggerTaggerBuilder: Tagger.Builder<Int>,
-    private val powerTaggerBuilder: Tagger.Builder<Double>,
+    private val triggerTaggerBuilder: Tagger.BuilderForItems<Int>,
+    private val powerTaggerBuilder: Tagger.BuilderForItems<Double>,
 ) : ExplosiveCollector {
     private fun getDropItems(): Sequence<Item> = sequence {
         for (world in plugin.server.worlds) {
@@ -36,16 +36,12 @@ class ExplosiveCollectorImpl(
         }
     }
 
-    override fun getExplosives(): Iterable<Explosive> =
-        getDropItems().mapNotNull { item ->
-            val itemMetaCopy = item.itemStack.itemMeta
-            if (itemMetaCopy != null) {
-                val triggerTagger = triggerTaggerBuilder.getTagger(itemMetaCopy)
-                val powerTagger = powerTaggerBuilder.getTagger(itemMetaCopy)
-                if (triggerTagger.hasValue() && powerTagger.hasValue()) {
-                    return@mapNotNull ExplosiveImpl(item, triggerTagger, powerTagger)
-                }
-            }
-            null
-        }.asIterable()
+    override fun getExplosives(): Iterable<Explosive> = getDropItems().mapNotNull { item ->
+        val triggerTagger = triggerTaggerBuilder.getTagger(item)
+        val powerTagger = powerTaggerBuilder.getTagger(item)
+        if (triggerTagger.hasValue() && powerTagger.hasValue()) {
+            return@mapNotNull ExplosiveImpl(item, triggerTagger, powerTagger)
+        }
+        null
+    }.asIterable()
 }

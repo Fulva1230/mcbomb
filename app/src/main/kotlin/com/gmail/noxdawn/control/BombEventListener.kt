@@ -10,20 +10,18 @@ import org.bukkit.event.entity.ItemSpawnEvent
 import java.util.*
 
 class BombEventListener(
-    private val bombCountTaggerBuilder: Tagger.Builder<Int>,
-    private val bombUniqueTaggerBuilder: Tagger.Builder<UUID>,
+    private val bombCountTaggerBuilder: Tagger.BuilderForItems<Int>,
+    private val bombUniqueTaggerBuilder: Tagger.BuilderForItems<UUID>,
     private val logger: Logger
 ) : Listener {
     @EventHandler
     fun setBombToChainExplosion(event: EntityDamageEvent) {
         val item = event.entity as? Item
         if (item != null) {
-            item.itemStack.itemMeta = item.itemStack.itemMeta?.also { dataHolder ->
-                val countTagger = bombCountTaggerBuilder.getTagger(dataHolder)
-                if (countTagger.hasValue()) {
-                    countTagger.value = 0
-                    event.isCancelled = true
-                }
+            val countTagger = bombCountTaggerBuilder.getTagger(item)
+            if (countTagger.hasValue()) {
+                countTagger.value = 0
+                event.isCancelled = true
             }
         }
     }
@@ -34,14 +32,12 @@ class BombEventListener(
     }
 
     private fun prepareBomb(item: Item) {
-        item.itemStack.itemMeta = item.itemStack.itemMeta?.also {
-            val countTagger = bombCountTaggerBuilder.getTagger(it)
-            if (countTagger.hasValue()) {
-                item.customName = "${(countTagger.value + 9) / 10}"
-                item.isCustomNameVisible = true
-                val uniqueTagger = bombUniqueTaggerBuilder.getTagger(it)
-                uniqueTagger.value = UUID.randomUUID()
-            }
+        val countTagger = bombCountTaggerBuilder.getTagger(item)
+        if (countTagger.hasValue()) {
+            item.customName = "${(countTagger.value + 9) / 10}"
+            item.isCustomNameVisible = true
+            val uniqueTagger = bombUniqueTaggerBuilder.getTagger(item)
+            uniqueTagger.value = UUID.randomUUID()
         }
     }
 }
