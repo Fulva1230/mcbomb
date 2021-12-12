@@ -92,7 +92,12 @@ val module = module {
     }
     single<Listener>(named("bomb_remote_listener")) {
         RemoteBombEventListener(
-            get(named("remote_bomb_label")), get(named("bomb_trigger")), get()
+            get(named("remote_bomb_label")),
+            get(named("bomb_trigger")),
+            get(named("remote_bomb_label")),
+            get(named("bomb_trigger")),
+            get(named("bomb_unique")),
+            get()
         )
     }
     single<RemoteBombsCollector> {

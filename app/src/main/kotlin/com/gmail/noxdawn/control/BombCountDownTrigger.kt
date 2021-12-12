@@ -9,11 +9,13 @@ class BombCountDownTrigger(
     private val triggerTagger: Tagger<Int>,
 ) : CountDownTimer {
     override fun countDown() {
-        if (countTagger.value > 0) {
-            --countTagger.value
+        var countValue = countTagger.value
+        if (countValue != null && countValue > 0) {
+            --countValue
+            countTagger.value = countValue
+            item.customName = "${(countValue + 9) / 10}"
         }
-        item.customName = "${(countTagger.value + 9) / 10}"
-        if (countTagger.value == 0) {
+        if (countValue == 0) {
             triggerTagger.value = 1
             countTagger.value = -1
         }

@@ -33,8 +33,9 @@ class BombEventListener(
 
     private fun prepareBomb(item: Item) {
         val countTagger = bombCountTaggerBuilder.getTagger(item)
-        if (countTagger.hasValue()) {
-            item.customName = "${(countTagger.value + 9) / 10}"
+        val countValue = countTagger.value
+        if (countValue != null) {
+            item.customName = "${(countValue + 9) / 10}"
             item.isCustomNameVisible = true
             val uniqueTagger = bombUniqueTaggerBuilder.getTagger(item)
             uniqueTagger.value = UUID.randomUUID()

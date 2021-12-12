@@ -13,7 +13,7 @@ class Explosive(
         get() = triggerTagger.value == 1
 
     override fun trigger() {
-        item.world.createExplosion(item.location, powerTagger.value.toFloat())
+        item.world.createExplosion(item.location, powerTagger.value?.toFloat() ?: 3.0f)
         item.remove()
     }
 
