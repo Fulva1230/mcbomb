@@ -9,7 +9,7 @@ class IntegerTaggerImpl private constructor(
     private val item: PersistentDataHolder,
 ) : Tagger<Int> {
     override var value: Int
-        get() = item.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, -1)
+        get() = item.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, 0)
         set(value) {
             item.persistentDataContainer.set(key, PersistentDataType.INTEGER, value)
         }
