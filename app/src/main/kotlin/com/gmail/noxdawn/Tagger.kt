@@ -42,6 +42,11 @@ class TaggerImpl<T, Z : Any> private constructor(
         override fun getTagger(item: PersistentDataHolder): Tagger<Double> =
             TaggerImpl(key, item, PersistentDataType.DOUBLE, 0.0)
     }
+
+    class StringBuilderImpl(private val key: NamespacedKey) : Tagger.Builder<String> {
+        override fun getTagger(item: PersistentDataHolder): Tagger<String> =
+            TaggerImpl(key, item, PersistentDataType.STRING, "")
+    }
 }
 
 class ItemTaggerImpl<T, Z : Any> private constructor(
@@ -68,6 +73,10 @@ class ItemTaggerImpl<T, Z : Any> private constructor(
 
     class DoubleBuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<Double> {
         override fun getTagger(item: Item): Tagger<Double> = ItemTaggerImpl(key, item, PersistentDataType.DOUBLE, 0.0)
+    }
+
+    class StringBuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<String> {
+        override fun getTagger(item: Item): Tagger<String> = ItemTaggerImpl(key, item, PersistentDataType.STRING, "")
     }
 }
 

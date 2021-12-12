@@ -12,7 +12,7 @@ import java.util.*
 class BombEventListener(
     private val bombCountTaggerBuilder: Tagger.BuilderForItems<Int>,
     private val bombUniqueTaggerBuilder: Tagger.BuilderForItems<UUID>,
-    private val logger: Logger
+    private val logger: Logger,
 ) : Listener {
     @EventHandler
     fun setBombToChainExplosion(event: EntityDamageEvent) {

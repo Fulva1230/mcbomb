@@ -1,8 +1,6 @@
 package com.gmail.noxdawn
 
-import com.gmail.noxdawn.commands.BombCreationExecutor
-import com.gmail.noxdawn.commands.BombInfoExecutor
-import com.gmail.noxdawn.commands.CommandSpec
+import com.gmail.noxdawn.commands.*
 import com.gmail.noxdawn.control.*
 import org.bukkit.NamespacedKey
 import org.bukkit.event.Listener
@@ -54,19 +52,54 @@ val uuidTaggerSuite: Module.(name: String) -> Unit = { name ->
     }
 }
 
+val stringTaggerSuite: Module.(name: String) -> Unit = { name ->
+    single(named(name)) { NamespacedKey(get<JavaPlugin>(), name) }
+    single<Tagger.BuilderForItems<String>>(named(name)) {
+        ItemTaggerImpl.StringBuilderImpl(
+            get(named(name))
+        )
+    }
+    single<Tagger.Builder<String>>(named(name)) {
+        TaggerImpl.StringBuilderImpl(
+            get(named(name))
+        )
+    }
+}
 
 val module = module {
     intTaggerSuite("bomb_count")
     uuidTaggerSuite("bomb_unique")
     doubleTaggerSuite("bomb_power")
     intTaggerSuite("bomb_trigger")
+    stringTaggerSuite("remote_bomb_label")
     single(named("bomb")) {
         CommandSpec(
             "bomb", BombCreationExecutor(get(named("bomb_count")), get(named("bomb_power")), get(named("bomb_trigger")))
         )
     }
     single(named("bombinfo")) { CommandSpec("bombinfo", BombInfoExecutor(get(named("bomb_trigger")))) }
-    single<Listener> { BombEventListener(get(named("bomb_count")), get(named("bomb_unique")), get()) }
+    single(named("remotebomb")) {
+        CommandSpec(
+            "remotebomb",
+            RemoteBombExecutor(get(named("remote_bomb_label")), get(named("bomb_trigger")), get(named("bomb_power")))
+        )
+    }
+    single(named("bombremote")) { CommandSpec("bombremote", BombRemoteExecutor(get(named("remote_bomb_label")))) }
+    single<Listener>(named("bomb_count_listener")) {
+        BombEventListener(
+            get(named("bomb_count")), get(named("bomb_unique")), get()
+        )
+    }
+    single<Listener>(named("bomb_remote_listener")) {
+        RemoteBombEventListener(
+            get(named("remote_bomb_label")), get(named("bomb_trigger")), get()
+        )
+    }
+    single<RemoteBombsCollector> {
+        RemoteBombsCollectorImpl(
+            get(), get(named("bomb_trigger")), get(named("remote_bomb_label"))
+        )
+    }
     single<Logger> { VerboseLoggerImpl(get()) }
     single { get<JavaPlugin>().logger }
     single<Controller>(named("countdown_controller")) { CountDownController(get()) }

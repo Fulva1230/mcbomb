@@ -20,11 +20,19 @@ spigot {
     commands {
         create("bomb") {
             description = "Make the items hold bombs"
-            usage = "/<command>"
+            usage = "/<command> [last] [power]"
         }
         create("bombinfo") {
             description = "Check items hold are bombs"
             usage = "/<command>"
+        }
+        create("bombremote") {
+            description = "Make the items hold bomb triggers"
+            usage = "/<command> <label>"
+        }
+        create("remotebomb"){
+            description = "Make the items hold remote bombs"
+            usage = "/<command> <label> [power]"
         }
     }
 }
