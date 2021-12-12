@@ -19,22 +19,55 @@ interface Tagger<T> {
     }
 }
 
-class IntegerTaggerImpl private constructor(
+class TaggerImpl<T, Z : Any> private constructor(
     private val key: NamespacedKey,
     private val item: PersistentDataHolder,
-) : Tagger<Int> {
-    override var value: Int
-        get() = item.persistentDataContainer.getOrDefault(key, PersistentDataType.INTEGER, 0)
+    private val dataType: PersistentDataType<T, Z>,
+    private val default: Z
+) : Tagger<Z> {
+    override var value: Z
+        get() = item.persistentDataContainer.getOrDefault(key, dataType, default)
         set(value) {
-            item.persistentDataContainer.set(key, PersistentDataType.INTEGER, value)
+            item.persistentDataContainer.set(key, dataType, value)
         }
 
-    override fun hasValue(): Boolean = item.persistentDataContainer.has(key, PersistentDataType.INTEGER)
+    override fun hasValue(): Boolean = item.persistentDataContainer.has(key, dataType)
 
-    class BuilderImpl(private val key: NamespacedKey) : Tagger.Builder<Int> {
-        override fun getTagger(item: PersistentDataHolder): Tagger<Int> {
-            return IntegerTaggerImpl(key, item)
+    class IntegerBuilderImpl(private val key: NamespacedKey) : Tagger.Builder<Int> {
+        override fun getTagger(item: PersistentDataHolder): Tagger<Int> =
+            TaggerImpl(key, item, PersistentDataType.INTEGER, 0)
+    }
+
+    class DoubleBuilderImpl(private val key: NamespacedKey) : Tagger.Builder<Double> {
+        override fun getTagger(item: PersistentDataHolder): Tagger<Double> =
+            TaggerImpl(key, item, PersistentDataType.DOUBLE, 0.0)
+    }
+}
+
+class ItemTaggerImpl<T, Z : Any> private constructor(
+    private val key: NamespacedKey,
+    private val item: Item,
+    private val dataType: PersistentDataType<T, Z>,
+    private val default: Z
+) : Tagger<Z> {
+    override var value: Z
+        get() = item.itemStack.itemMeta?.persistentDataContainer?.getOrDefault(
+            key, dataType, default
+        ) ?: default
+        set(value) {
+            item.itemStack.itemMeta = item.itemStack.itemMeta?.also { notNullItemMetaCopy ->
+                notNullItemMetaCopy.persistentDataContainer.set(key, dataType, value)
+            }
         }
+
+    override fun hasValue(): Boolean = item.itemStack.itemMeta?.persistentDataContainer?.has(key, dataType) == true
+
+    class IntegerBuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<Int> {
+        override fun getTagger(item: Item): Tagger<Int> = ItemTaggerImpl(key, item, PersistentDataType.INTEGER, 0)
+    }
+
+    class DoubleBuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<Double> {
+        override fun getTagger(item: Item): Tagger<Double> = ItemTaggerImpl(key, item, PersistentDataType.DOUBLE, 0.0)
     }
 }
 
@@ -55,69 +88,6 @@ class UUIDTaggerImpl private constructor(
 
     class BuilderImpl(private val key: NamespacedKey) : Tagger.Builder<UUID> {
         override fun getTagger(item: PersistentDataHolder): Tagger<UUID> = UUIDTaggerImpl(key, item)
-    }
-}
-
-class DoubleTaggerImpl private constructor(
-    private val key: NamespacedKey,
-    private val item: PersistentDataHolder,
-) : Tagger<Double> {
-    override var value: Double
-        get() {
-            return item.persistentDataContainer.getOrDefault(key, PersistentDataType.DOUBLE, 0.0)
-        }
-        set(value) {
-            item.persistentDataContainer.set(key, PersistentDataType.DOUBLE, value)
-        }
-
-    override fun hasValue(): Boolean = item.persistentDataContainer.has(key, PersistentDataType.DOUBLE)
-
-    class BuilderImpl(private val key: NamespacedKey) : Tagger.Builder<Double> {
-        override fun getTagger(item: PersistentDataHolder): Tagger<Double> = DoubleTaggerImpl(key, item)
-    }
-}
-
-class ItemIntegerTaggerImpl private constructor(
-    private val key: NamespacedKey, private val item: Item
-) : Tagger<Int> {
-    override var value: Int
-        get() = item.itemStack.itemMeta?.persistentDataContainer?.getOrDefault(
-            key, PersistentDataType.INTEGER, 0
-        ) ?: 0
-        set(value) {
-            item.itemStack.itemMeta = item.itemStack.itemMeta?.also { notNullItemMetaCopy ->
-                notNullItemMetaCopy.persistentDataContainer.set(key, PersistentDataType.INTEGER, value)
-            }
-        }
-
-    override fun hasValue(): Boolean =
-        item.itemStack.itemMeta?.persistentDataContainer?.has(key, PersistentDataType.INTEGER) == true
-
-
-    class BuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<Int> {
-        override fun getTagger(item: Item): Tagger<Int> = ItemIntegerTaggerImpl(key, item)
-    }
-}
-
-class ItemDoubleTaggerImpl private constructor(
-    private val key: NamespacedKey, private val item: Item
-) : Tagger<Double> {
-    override var value: Double
-        get() = item.itemStack.itemMeta?.persistentDataContainer?.getOrDefault(
-            key, PersistentDataType.DOUBLE, 0.0
-        ) ?: 0.0
-        set(value) {
-            item.itemStack.itemMeta = item.itemStack.itemMeta?.also { notNullItemMetaCopy ->
-                notNullItemMetaCopy.persistentDataContainer.set(key, PersistentDataType.DOUBLE, value)
-            }
-        }
-
-    override fun hasValue(): Boolean =
-        item.itemStack.itemMeta?.persistentDataContainer?.has(key, PersistentDataType.DOUBLE) == true
-
-
-    class BuilderImpl(private val key: NamespacedKey) : Tagger.BuilderForItems<Double> {
-        override fun getTagger(item: Item): Tagger<Double> = ItemDoubleTaggerImpl(key, item)
     }
 }
 
