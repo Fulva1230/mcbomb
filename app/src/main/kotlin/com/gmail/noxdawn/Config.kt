@@ -53,8 +53,8 @@ val module = module {
             get(), get(named("bomb_trigger")), get(named("bomb_count"))
         )
     }
-    single<Controller>(named("explosion_controller")) { ExplosionController(get()) }
-    single<ExplosiveCollector> { ExplosiveCollectorImpl(get(), get(named("bomb_trigger")), get(named("bomb_power"))) }
+    single<Controller>(named("trigger_controller")) { TriggerController(getAll()) }
+    single<TriggerCollector>(named("explosive_collector")) { ExplosiveCollector(get(), get(named("bomb_trigger")), get(named("bomb_power"))) }
     single<TaskRegistry> { TaskRegistryImpl(get()) }
     single(createdAtStart = true) { Runner(get(), getAll()) }
 }

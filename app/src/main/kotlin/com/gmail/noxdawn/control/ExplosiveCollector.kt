@@ -4,26 +4,26 @@ import com.gmail.noxdawn.Tagger
 import org.bukkit.entity.Item
 import org.bukkit.plugin.java.JavaPlugin
 
-class ExplosiveImpl(
+class Explosive(
     private val item: Item,
     private val triggerTagger: Tagger<Int>,
     private val powerTagger: Tagger<Double>,
-) : Explosive {
+) : Trigger {
     override val isTriggered: Boolean
         get() = triggerTagger.value == 1
 
-    override fun explode() {
+    override fun trigger() {
         item.world.createExplosion(item.location, powerTagger.value.toFloat())
         item.remove()
     }
 
 }
 
-class ExplosiveCollectorImpl(
+class ExplosiveCollector(
     private val plugin: JavaPlugin,
     private val triggerTaggerBuilder: Tagger.BuilderForItems<Int>,
     private val powerTaggerBuilder: Tagger.BuilderForItems<Double>,
-) : ExplosiveCollector {
+) : TriggerCollector {
     private fun getDropItems(): Sequence<Item> = sequence {
         for (world in plugin.server.worlds) {
             for (chunk in world.loadedChunks) {
@@ -36,11 +36,11 @@ class ExplosiveCollectorImpl(
         }
     }
 
-    override fun getExplosives(): Iterable<Explosive> = getDropItems().mapNotNull { item ->
+    override fun getTriggers(): Iterable<Trigger> = getDropItems().mapNotNull { item ->
         val triggerTagger = triggerTaggerBuilder.getTagger(item)
         val powerTagger = powerTaggerBuilder.getTagger(item)
         if (triggerTagger.hasValue() && powerTagger.hasValue()) {
-            return@mapNotNull ExplosiveImpl(item, triggerTagger, powerTagger)
+            return@mapNotNull Explosive(item, triggerTagger, powerTagger)
         }
         null
     }.asIterable()
