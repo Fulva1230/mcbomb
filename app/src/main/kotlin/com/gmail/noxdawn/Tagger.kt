@@ -10,6 +10,7 @@ interface Tagger<T : Any> {
     var value: T?
     fun hasValue(): Boolean
 
+//TODO We should make a builder to give both tagger for items or persistentdataholders
     interface Builder<T : Any> {
         fun getTagger(item: PersistentDataHolder): Tagger<T>
     }
