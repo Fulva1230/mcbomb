@@ -1,8 +1,8 @@
 import kr.entree.spigradle.kotlin.*
 
 plugins {
-    kotlin("jvm") version "1.6.0"
-    kotlin("kapt") version "1.6.0"
+    kotlin("jvm") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
     id("kr.entree.spigradle") version "2.2.4"
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
