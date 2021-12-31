@@ -13,7 +13,7 @@ class RemoteBombExecutor(
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val player = sender.server.getPlayer(sender.name)
         val label1 = args.getOrNull(0)
-        val power = args.getOrNull(1)?.toDouble() ?: 3.0
+        val power = args.getOrNull(1)?.toDoubleOrNull() ?: 3.0
         if (label1 != null && player != null) {
             val itemInMainHand = player.inventory.itemInMainHand
             val itemMetaCopy = itemInMainHand.itemMeta

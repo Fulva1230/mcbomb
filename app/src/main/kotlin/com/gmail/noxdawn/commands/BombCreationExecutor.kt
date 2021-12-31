@@ -12,8 +12,8 @@ class BombCreationExecutor(
 ) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val player = sender.server.getPlayer(sender.name)
-        val secs = args.getOrNull(0)?.toInt()
-        val power = args.getOrNull(1)?.toDouble()
+        val secs = args.getOrNull(0)?.toIntOrNull()
+        val power = args.getOrNull(1)?.toDoubleOrNull()
         if (player != null) {
             val itemInHand = player.inventory.itemInMainHand
             val itemMetaInHandCopy = itemInHand.itemMeta
