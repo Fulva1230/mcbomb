@@ -46,7 +46,7 @@ dependencies {
     compileOnly(spigot("1.17.1"))
 }
 
-tasks.register("populate plugin", Copy::class) {
+tasks.register("populate-plugin", Copy::class) {
     group = "debug"
     dependsOn("shadowJar")
     from("build/libs") {

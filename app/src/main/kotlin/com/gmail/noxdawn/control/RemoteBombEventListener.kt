@@ -22,9 +22,7 @@ interface RemoteBombsCollector {
 class RemoteBombEventListener(
     private val remoteBombLabelTaggerBuilder: Tagger.Builder<String>,
     private val triggerTaggerBuilder: Tagger.Builder<Int>,
-    private val remoteBombLabelTaggerBuilderForItems: Tagger.BuilderForItems<String>,
-    private val triggerTaggerBuilderForItems: Tagger.BuilderForItems<Int>,
-    private val uuidTaggerBuilderForItems: Tagger.BuilderForItems<UUID>,
+    private val uuidTaggerBuilder: Tagger.Builder<UUID>,
     private val remoteBombsCollector: RemoteBombsCollector
 ) : Listener {
 
@@ -39,19 +37,19 @@ class RemoteBombEventListener(
     }
 
     fun makeBombNonUnique(item: Item) {
-        val remoteBombLabelTagger = remoteBombLabelTaggerBuilderForItems.getTagger(item)
-        val triggerTagger = triggerTaggerBuilderForItems.getTagger(item)
+        val remoteBombLabelTagger = remoteBombLabelTaggerBuilder.getTagger(item)
+        val triggerTagger = triggerTaggerBuilder.getTagger(item)
         if (remoteBombLabelTagger.hasValue() && triggerTagger.hasValue()) {
-            uuidTaggerBuilderForItems.getTagger(item).value = null
+            uuidTaggerBuilder.getTagger(item).value = null
         }
     }
 
     @EventHandler
     fun makeBombUnique(event: ItemSpawnEvent) {
-        val remoteBombLabelTagger = remoteBombLabelTaggerBuilderForItems.getTagger(event.entity)
-        val triggerTagger = triggerTaggerBuilderForItems.getTagger(event.entity)
+        val remoteBombLabelTagger = remoteBombLabelTaggerBuilder.getTagger(event.entity)
+        val triggerTagger = triggerTaggerBuilder.getTagger(event.entity)
         if (remoteBombLabelTagger.hasValue() && triggerTagger.hasValue()) {
-            uuidTaggerBuilderForItems.getTagger(event.entity).value = UUID.randomUUID()
+            uuidTaggerBuilder.getTagger(event.entity).value = UUID.randomUUID()
         }
     }
 

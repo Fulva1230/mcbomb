@@ -6,8 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class RemoteBombsCollectorImpl(
     private val plugin: JavaPlugin,
-    private val triggerTaggerBuilder: Tagger.BuilderForItems<Int>,
-    private val remoteBombLabelTaggerBuilder: Tagger.BuilderForItems<String>
+    private val triggerTaggerBuilder: Tagger.Builder<Int>,
+    private val remoteBombLabelTaggerBuilder: Tagger.Builder<String>
 ) : RemoteBombsCollector {
     private fun getDropItems(): Sequence<Item> = sequence {
         for (world in plugin.server.worlds) {

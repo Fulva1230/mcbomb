@@ -12,57 +12,29 @@ import java.util.*
 
 val intTaggerSuite: Module.(name: String) -> Unit = { name ->
     single(named(name)) { NamespacedKey(get<JavaPlugin>(), name) }
-    single<Tagger.BuilderForItems<Int>>(named(name)) {
-        ItemTaggerImpl.IntegerBuilderImpl(
-            get(named(name))
-        )
-    }
     single<Tagger.Builder<Int>>(named(name)) {
-        TaggerImpl.IntegerBuilderImpl(
-            get(named(name))
-        )
+        IntegerTaggerBuilderImpl(get(named(name)))
     }
 }
 
 val doubleTaggerSuite: Module.(name: String) -> Unit = { name ->
     single(named(name)) { NamespacedKey(get<JavaPlugin>(), name) }
-    single<Tagger.BuilderForItems<Double>>(named(name)) {
-        ItemTaggerImpl.DoubleBuilderImpl(
-            get(named(name))
-        )
-    }
     single<Tagger.Builder<Double>>(named(name)) {
-        TaggerImpl.DoubleBuilderImpl(
-            get(named(name))
-        )
+        DoubleTaggerBuilderImpl(get(named(name)))
     }
 }
 
 val uuidTaggerSuite: Module.(name: String) -> Unit = { name ->
     single(named(name)) { NamespacedKey(get<JavaPlugin>(), name) }
-    single<Tagger.BuilderForItems<UUID>>(named(name)) {
-        ItemUUIDTaggerImpl.BuilderImpl(
-            get(named(name))
-        )
-    }
     single<Tagger.Builder<UUID>>(named(name)) {
-        UUIDTaggerImpl.BuilderImpl(
-            get(named(name))
-        )
+        UUIDTaggerBuilderImpl(get(named(name)))
     }
 }
 
 val stringTaggerSuite: Module.(name: String) -> Unit = { name ->
     single(named(name)) { NamespacedKey(get<JavaPlugin>(), name) }
-    single<Tagger.BuilderForItems<String>>(named(name)) {
-        ItemTaggerImpl.StringBuilderImpl(
-            get(named(name))
-        )
-    }
     single<Tagger.Builder<String>>(named(name)) {
-        TaggerImpl.StringBuilderImpl(
-            get(named(name))
-        )
+        StringTaggerBuilderImpl(get(named(name)))
     }
 }
 
@@ -92,8 +64,6 @@ val module = module {
     }
     single<Listener>(named("bomb_remote_listener")) {
         RemoteBombEventListener(
-            get(named("remote_bomb_label")),
-            get(named("bomb_trigger")),
             get(named("remote_bomb_label")),
             get(named("bomb_trigger")),
             get(named("bomb_unique")),

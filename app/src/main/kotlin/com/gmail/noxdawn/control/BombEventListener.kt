@@ -10,8 +10,8 @@ import org.bukkit.event.entity.ItemSpawnEvent
 import java.util.*
 
 class BombEventListener(
-    private val bombCountTaggerBuilder: Tagger.BuilderForItems<Int>,
-    private val bombUniqueTaggerBuilder: Tagger.BuilderForItems<UUID>,
+    private val bombCountTaggerBuilder: Tagger.Builder<Int>,
+    private val bombUniqueTaggerBuilder: Tagger.Builder<UUID>,
     private val logger: Logger,
 ) : Listener {
     @EventHandler

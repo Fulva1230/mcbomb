@@ -21,8 +21,8 @@ class Explosive(
 
 class ExplosiveCollector(
     private val plugin: JavaPlugin,
-    private val triggerTaggerBuilder: Tagger.BuilderForItems<Int>,
-    private val powerTaggerBuilder: Tagger.BuilderForItems<Double>,
+    private val triggerTaggerBuilder: Tagger.Builder<Int>,
+    private val powerTaggerBuilder: Tagger.Builder<Double>,
 ) : TriggerCollector {
     private fun getDropItems(): Sequence<Item> = sequence {
         for (world in plugin.server.worlds) {

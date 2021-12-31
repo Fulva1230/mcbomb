@@ -6,8 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class BombCountDownTriggerCollector(
     private val plugin: JavaPlugin,
-    private val triggerTaggerBuilder: Tagger.BuilderForItems<Int>,
-    private val countTaggerBuilder: Tagger.BuilderForItems<Int>,
+    private val triggerTaggerBuilder: Tagger.Builder<Int>,
+    private val countTaggerBuilder: Tagger.Builder<Int>,
 ) : CountDownTimerCollector {
     private fun getDropItems(): Sequence<Item> = sequence {
         for (world in plugin.server.worlds) {
