@@ -8,5 +8,5 @@
  */
 
 rootProject.name = "mcbomb"
-include("app")
+include("mcbomb")
 include("lib")
