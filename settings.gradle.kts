@@ -9,4 +9,3 @@
 
 rootProject.name = "mcbomb"
 include("mcbomb")
-include("lib")
