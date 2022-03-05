@@ -1,0 +1,7 @@
+---
+title: "Commands"
+date: 2022-03-05T21:52:42+08:00
+draft: false
+weight: 2
+description: For obtaining all the crazy bombs
+---

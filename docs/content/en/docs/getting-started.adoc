@@ -1,0 +1,17 @@
+---
+title: "Getting Started"
+date: 2022-03-05T21:52:42+08:00
+draft: false
+weight: 1
+description: Get the plugin for your Minecraft server
+---
+
+== Features
+1. Grenades that explode after you drop them for a while
+2. Remote-controlled bombs that can be triggered with a remote
+
+== Installation
+
+1. Use the https://github.com/Fulva1230/mcbomb/releases[link] to find the latest version of the plugin
+
+2. Put the jar file in the "plugins" folder under the root folder of the server
