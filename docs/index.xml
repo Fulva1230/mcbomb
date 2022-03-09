@@ -1,0 +1,71 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mcbomb – Welcome to Mcbomb</title><link>http://example.org/docs/</link><description>Recent content in Welcome to Mcbomb on Mcbomb</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 05 Mar 2022 21:52:42 +0800</lastBuildDate><atom:link href="http://example.org/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Docs: Getting Started</title><link>http://example.org/docs/getting-started/</link><pubDate>Sat, 05 Mar 2022 21:52:42 +0800</pubDate><guid>http://example.org/docs/getting-started/</guid><description>
+&lt;div class="sect1">
+&lt;h2 id="_features">Features&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="olist arabic">
+&lt;ol class="arabic">
+&lt;li>
+&lt;p>Grenades that explode after you drop them for a while&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Remote-controlled bombs that can be triggered with a remote&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_installation">Installation&lt;/h2>
+&lt;div class="sectionbody">
+&lt;div class="olist arabic">
+&lt;ol class="arabic">
+&lt;li>
+&lt;p>Use the &lt;a href="https://github.com/Fulva1230/mcbomb/releases">link&lt;/a> to find the latest version of the plugin&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Put the jar file in the &amp;#34;plugins&amp;#34; folder under the root folder of the server&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;div class="sect1">
+&lt;h2 id="_getting_your_first_grenade">Getting your first grenade&lt;/h2>
+&lt;div class="sectionbody">
+&lt;/div>
+&lt;/div></description></item><item><title>Docs: Commands</title><link>http://example.org/docs/commands/</link><pubDate>Sat, 05 Mar 2022 21:52:42 +0800</pubDate><guid>http://example.org/docs/commands/</guid><description>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre>/bomb [last] [power]&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Making the items in your hand bombs with remaining time given by [last] and power given by [power].&lt;/p>
+&lt;/div>
+&lt;hr/>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre>/bombinfo&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Checking if the items in your hand are bombs&lt;/p>
+&lt;/div>
+&lt;hr/>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre>/bombremote &amp;lt;label&amp;gt;&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Making the items in your hand bomb triggers. The trigger can signal the remote bombs with a label given by &amp;lt;label&amp;gt;.&lt;/p>
+&lt;/div>
+&lt;hr/>
+&lt;div class="listingblock">
+&lt;div class="content">
+&lt;pre>/remotebomb &amp;lt;label&amp;gt; [power]&lt;/pre>
+&lt;/div>
+&lt;/div>
+&lt;div class="paragraph">
+&lt;p>Making the items in your hand remote bombs with power given by [power]. The remote bombs can be triggered by a trigger with a label given by &amp;lt;label&amp;gt;.&lt;/p>
+&lt;/div></description></item></channel></rss>
