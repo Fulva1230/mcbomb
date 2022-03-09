@@ -5,3 +5,28 @@ draft: false
 weight: 2
 description: For obtaining all the crazy bombs
 ---
+----
+/bomb [last] [power]
+----
+Making the items in your hand bombs with remaining time given by [last] and power given by [power].
+
+'''
+
+----
+/bombinfo
+----
+Checking if the items in your hand are bombs
+
+'''
+
+----
+/bombremote <label>
+----
+Making the items in your hand bomb triggers. The trigger can signal the remote bombs with a label given by <label>.
+
+'''
+
+----
+/remotebomb <label> [power]
+----
+Making the items in your hand remote bombs with power given by [power]. The remote bombs can be triggered by a trigger with a label given by <label>.

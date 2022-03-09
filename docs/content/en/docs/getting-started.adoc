@@ -15,3 +15,5 @@ description: Get the plugin for your Minecraft server
 1. Use the https://github.com/Fulva1230/mcbomb/releases[link] to find the latest version of the plugin
 
 2. Put the jar file in the "plugins" folder under the root folder of the server
+
+== Getting your first grenade
