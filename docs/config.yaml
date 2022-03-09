@@ -20,3 +20,6 @@ markup:
   goldmark:
     renderer:
       unsafe: true
+
+params:
+  copyright: Fulva1230
